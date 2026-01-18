@@ -6,11 +6,10 @@ Evitar caminhos absolutos ou relativas que possam levar à saída do diretório 
 
 """
 from pathlib import Path 
-
 # =============================
 # CONFIGURAÇÃO DE SEGURANÇA
 # =============================
-global ALLOWED_DIR
+
 ALLOWED_DIR = Path(r'C:\Users\alark\OneDrive\Documentos\GitHub\Procedural-World-Simulation-Engine').resolve()
 
 

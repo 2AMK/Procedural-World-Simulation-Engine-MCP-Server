@@ -4,7 +4,7 @@ em um caminho específico.
 """
 
 from pathlib import Path
-from utils.resolve_safe_path import resolve_safe_path
+from utils.resolve_safe_path import resolve_safe_path, ALLOWED_DIR
 
 
 def tree_file(args: dict):
@@ -25,14 +25,15 @@ def tree_file(args: dict):
 
         node = {
             "name": current.name,
-            "type": "dir" if current.is_dir() else "file",
+            "path": str(current.relative_to(ALLOWED_DIR)),
+            "type": "dir" if current.is_dir() else "file"
         }
 
         if current.is_dir():
             children = []
 
             try:
-                for child in current.iterdir():
+                for child in sorted(current.iterdir(), key=lambda p: p.name.lower()):
                     result = walk(child, depth + 1)
                     if result is not None:
                         children.append(result)
