@@ -1,0 +1,3 @@
+# Requisitos necessários para utilizar o servidor de MCP.
+python >= 3.11
+mcp
