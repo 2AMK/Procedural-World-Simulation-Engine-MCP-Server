@@ -9,6 +9,15 @@ from utils.resolve_safe_path import ALLOWED_DIR
 def get_info(args: dict):
     """
     Informações gerais sobre o repositório.
+
+    Args:
+        args (dict): Um dicionário. Atualmente não há argumentos necessários.
+
+    Returns:
+       dict: Um dicionário com informações gerais sobre o repositório
+    Usage:
+        get_info({})
+
     """
     return {
         "base_dir": str(ALLOWED_DIR),

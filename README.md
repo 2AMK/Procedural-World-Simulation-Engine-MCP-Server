@@ -58,6 +58,29 @@ curl -X POST http://localhost:8000/tool/list_files_tool \
   -d '{"path": "."}'
 ```
 
+## Como testar
+Para rodar os testes unitários, tem que utilizar o Pytest.
+
+Para rodar os testes no diretório `tests`, no terminal execute o comando:
+```bash
+pytest tests/
+
+```
+
+
+## Cobertura de testes
+É possível verificar a cobertura dos testes utilizando o módulo `coverage`. 
+
+Para rodar a cobertura dos testes, no terminal execute:
+```bash
+coverage run -m pytest tests/
+coverage report -m
+```
+Para gerar um relatório de cobertura:
+```bash
+coverage html
+```
+Depois de executar esse comando, é só abrir o arquivo `index.html` gerado na pasta.
 
 ## Ferramentas Expostas
 

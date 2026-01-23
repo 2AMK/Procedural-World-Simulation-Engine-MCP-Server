@@ -18,17 +18,25 @@ ALLOWED_DIR = Path(r'C:\Users\alark\OneDrive\Documentos\GitHub\Procedural-World-
 # FUNÇÕES UTILITÁRIAS
 # =============================
 
-def resolve_safe_path(relative_str:str) -> Path:
+def resolve_safe_path(relative_str:str, *, base_dir=ALLOWED_DIR) -> Path:
 
     """
     Resolve um caminho de arquivo de forma segura, e garantir que 
     ele esteja dentro do diretório permitido.
 
+    Args:
+        relative_str (str): Caminho relativo a ser resolvido.
+        base_dir (Path, opcional): Diretório base permitido. Padrão é ALLOWED_DIR.
+    Returns:
+        Path: Caminho resolvido dentro do diretório permitido.
+    Raises:
+        PermissionError: Se o caminho estiver fora do diretório permitido.
+
     """
 
-    path = (ALLOWED_DIR / relative_str).resolve()
+    path = (base_dir / relative_str).resolve()
 
-    if ALLOWED_DIR not in path.parents and path != ALLOWED_DIR:
+    if base_dir not in path.parents and path != base_dir:
         raise PermissionError('Acesso fora do diretório permitido')
     
     return path
