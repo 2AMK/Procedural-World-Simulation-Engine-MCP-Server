@@ -7,14 +7,34 @@ from pathlib import Path
 from utils.resolve_safe_path import resolve_safe_path, ALLOWED_DIR
 
 
-def tree_file(args: dict, *, base_dir=ALLOWED_DIR):
+def tree_file(args: dict,
+              path = ".",
+              max_depth = 3,
+               *, 
+               base_dir=ALLOWED_DIR):
     """
     Retorna a árvore de diretórios até um determinado nível.
+
+    Args:
+        args (dict): Dicionário contendo o caminho relativo sob a chave "path" e a profundidade máxima sob a chave "max_depth".
+        base_dir (Path, opcional): Diretório base permitido. Padrão é ALLOWED_DIR.
+    Returns:
+        dict: Dicionário representando a estrutura do diretório.
+    Raises:
+        PermissionError: Se o caminho estiver fora do diretório permitido.
+        ValueError: Se o caminho fornecido não for um diretório.
+    Usage:
+        result = tree_file({"path": "subdir", "max_depth": 2}, base_dir=ALLOWED_DIR)
+
     """
+    # Puxar o argumento 
+    root = resolve_safe_path(path, base_dir=base_dir)
+    max_depth = args.get("max_depth", max_depth)
 
-    max_depth = args.get("max_depth", 3)
-    root = resolve_safe_path(args.get("path", "."))
 
+    if not root.is_dir():
+        raise ValueError(f"O caminho fornecido não é um diretório: {root}")
+    
     def walk(current: Path, depth: int):
         """
         Função recursiva para percorrer a árvore de diretórios.
@@ -29,15 +49,21 @@ def tree_file(args: dict, *, base_dir=ALLOWED_DIR):
             ValueError: Se o caminho fornecido não for um diretório.
         """
 
-        if depth > max_depth:
-            return None
-
         node = {
             "name": current.name,
-            "path": str(current.relative_to(base_dir)),
-            "type": "dir" if current.is_dir() else "file"
+            "path": str(Path(*current.parts[len(base_dir.parts):])),
+            "type": "dir" if current.is_dir() else "file",
+            "children": [] if current.is_dir() else None
         }
 
+        # Verifica se o depth atual é maior do que a profundidade máxima
+        # Caso se for maior, irá parar a função e retornar o que já tem até
+        # agora.
+        if depth >= max_depth:
+            return node
+
+        # Se o caminho atual é um diretório, não caminho, irá tentar pegar 
+        # os diretórios e arquivos filhos 
         if current.is_dir():
             children = []
 
@@ -46,12 +72,9 @@ def tree_file(args: dict, *, base_dir=ALLOWED_DIR):
                     result = walk(child, depth + 1)
                     if result is not None:
                         children.append(result)
-            except PermissionError:
-                # Evita quebrar o MCP server
-                pass
-
+                        
+            except (PermissionError, OSError):
+                pass # Evitar quebrar o servidor MCP                
             node["children"] = children
-
         return node
-
     return walk(root, 0)

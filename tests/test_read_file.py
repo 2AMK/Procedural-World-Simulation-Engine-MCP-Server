@@ -7,8 +7,6 @@ import tools.read_file as rf
 from tools.read_file import read_file
 import pytest
 
-import pytest
-
 def test_read_file_ok(fake_file_content):
     """
     Testa o comportamento esperado da função read_file quando chamada com um caminho válido para um arquivo de texto.
