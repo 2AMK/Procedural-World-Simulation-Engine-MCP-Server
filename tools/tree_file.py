@@ -28,6 +28,7 @@ def tree_file(args: dict,
 
     """
     # Puxar o argumento 
+    path = args.get("path", path)
     root = resolve_safe_path(path, base_dir=base_dir)
     max_depth = args.get("max_depth", max_depth)
 

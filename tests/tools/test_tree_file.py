@@ -42,6 +42,12 @@ def test_tree_file_outside_allowed(fake_file_tree):
 
 def test_tree_subdir_ok(fake_file_tree):
     """
-    Testa o comportamento esperado ao 
+    Testa o comportamento esperado ao usar a função `tree_file` em um subdiretório. 
     """
+    # Act
+    result = tf.tree_file({"path":"subdir", "max_depth":1}, base_dir=fake_file_tree)
+
+    # Assert
+    assert result["type"]== "dir"
+    assert any(child["name"]== "c.txt" for child in result["children"])
 

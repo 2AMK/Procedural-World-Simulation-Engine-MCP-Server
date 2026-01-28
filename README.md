@@ -66,6 +66,10 @@ Para rodar os testes no diretório `tests`, no terminal execute o comando:
 pytest tests/
 
 ```
+Alternativamente, caso não tivert acesso direto ao pytest, você pode rodar os testes via módulo do Python:
+```bash
+python -m pytest tests/
+```
 
 
 ## Cobertura de testes
