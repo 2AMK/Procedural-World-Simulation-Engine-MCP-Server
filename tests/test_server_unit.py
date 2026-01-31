@@ -43,8 +43,10 @@ class FakeMCPServer:
         return get_info(self.base_dir)
     
 
-class TestMCPServer:
-    """Testes unitários para o servidor MCP."""
+class TestFakeMCPServer:
+    """Testes unitários para verificar se o fake server está chamando e retornando corretamente.
+    Também verifica se as ferramentas estão integradas corretamente.
+    """
     def setup_mock_mcp(self, name, version, instructions):
         from pathlib import Path
         return FakeMCPServer(base_dir=Path.cwd())
@@ -65,7 +67,7 @@ class TestMCPServer:
     def test_read_file_tool(self, server):
         result = server.read_file_tool(path="tests/test_server.py")
         assert "content" in result
-        assert isinstance(result["content"], dict) or isinstance(result["content"], str) # Pode ser dicionário ou string dependendo da implementação
+        assert isinstance(result["content"], dict)
 
     def test_tree_file_tool(self, server):
         result = server.tree_file_tool(path=".", max_depth=2)
